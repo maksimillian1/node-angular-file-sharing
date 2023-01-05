@@ -14,7 +14,7 @@ import { NG_VALUE_ACCESSOR } from "@angular/forms";
   template: `
     <div
       *ngIf="!value; else mediaPreview"
-      tvDropFile
+      appDropFile
       (fileDropped)="setPhotoGallery($event)"
       class="flex items-center justify-center flex-col h-full w-full rounded-md border border-black border-dashed p-6">
       <label

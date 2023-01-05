@@ -1,7 +1,7 @@
 import { Directive, HostBinding, Output, EventEmitter, HostListener } from '@angular/core';
 
 @Directive({
-  selector: '[tvDropFile]',
+  selector: '[appDropFile]',
 })
 export class DropFileDirective {
   @HostBinding('class.fileover')
