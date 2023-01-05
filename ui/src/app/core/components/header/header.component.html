@@ -1,0 +1,34 @@
+<header class="border-b border-gray-200">
+  <header class="flex justify-between items-center max-w-[1440px] mx-auto px-10 py-4">
+    <h2 class="h-[30px] mr-6">Tera</h2>
+
+    <ng-container *ngIf="currentUser; else auth">
+      <div class="flex gap-2">
+      <button
+        class="bg-[#F0F0F0] rounded-full min-h-[40px] min-w-[40px] flex items-center p-2">
+        <img class="w-6 h-6" src="assets/icons/notification-icon.svg" alt="Menu icon">
+      </button>
+
+      <button (click)="logout()" class="bg-[#F0F0F0] min-w-[68px] rounded-full flex items-center p-1 pl-2">
+        <img class="mr-1 w-5 h-5" src="assets/icons/menu-icon.svg" alt="Menu icon">
+        <div class="flex items-center justify-center h-8 w-8 rounded-full bg-[#F25656]">
+          <img src="assets/images/user-placeholder.svg" alt="User Avatar">
+        </div>
+      </button>
+    </div>
+    </ng-container>
+  </header>
+</header>
+
+<ng-template #profileNotifications>
+  <div class="rounded-lg bg-[#F25656] p-8 mt-2">
+    <h5>Coming soon...</h5>
+  </div>
+</ng-template>
+
+<ng-template #auth>
+  <div>
+    <button routerLink="/auth/login" class="bg-[#F5F5F5] py-2 px-4 rounded-lg mr-2">Log In</button>
+    <button routerLink="/auth/registration" class="bg-[#F25656] text-white py-2 px-4 rounded-lg">Register</button>
+  </div>
+</ng-template>

@@ -1,0 +1,77 @@
+version: "3"
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_apk
+    working_dir: /project
+    depends_on:
+      - php_fpm
+    volumes:
+      - ./../api:/project
+      - ./config/dev/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./config/dev/logs/nginx/:/var/log/nginx/
+    ports:
+      - "80:80"
+
+  php_fpm:
+    image: webdevops/php-dev:8.1-alpine
+    container_name: php_fpm_apk
+    working_dir: /project
+    environment:
+      XDEBUG_DISCOVER_CLIENT_HOST: "true"
+      PHP_IDE_CONFIG: "serverName=apk-fpm"
+    depends_on:
+      - mysql
+      - redis
+    volumes:
+      - ./../api:/project
+      - ./config/dev/php/php.ini:/opt/docker/etc/php/php.ini
+      - ./config/dev/php/xdebug.ini:/opt/docker/etc/php/conf.d/xdebug.ini
+
+  # for local queues
+  redis:
+    image: redis:alpine
+    container_name: redis_apk
+    ports:
+      - "6379:6379"
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    container_name: mysql_apk_dev
+    networks:
+      - default
+    environment:
+      MYSQL_DATABASE: 'apk'
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "3306:3306"
+
+  mysql_phpunit:
+    image: mysql:8.0
+    restart: always
+    container_name: mysql_phpunit_apk
+    environment:
+      MYSQL_DATABASE: mysql_db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3301:3306"
+
+  echo:
+    image: oanhnn/laravel-echo-server
+    container_name: echo
+    ports:
+      - "8080:6001"
+    environment:
+      - "LARAVEL_ECHO_SERVER_DB=redis"
+      - "LARAVEL_ECHO_SERVER_AUTH_HOST=http://nginx:80"
+      - "LARAVEL_ECHO_SERVER_DEBUG=true"
+      - "REDIS_HOST=redis"
+      - "REDIS_PORT=6379"
+      - "REDIS_PASSWORD=null"
+      - "REDIS_KEY_PREFIX=echo_"
+      - "REDIS_DB=1"
+    links:
+      - redis
+      - nginx

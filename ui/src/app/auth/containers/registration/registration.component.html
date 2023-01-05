@@ -1,0 +1,185 @@
+<div class="max-w-[560px] mx-auto border border-black/[.08] rounded-2xl p-10 mt-6">
+
+  <form
+    [formGroup]="registrationForm"
+    (ngSubmit)="submit()"
+    class="grid gap-6">
+
+    <div class="grid grid-cols-1">
+
+      <h5 class="font-bold mb-2">
+        Create your account
+      </h5>
+      <p class="text-base mb-6">Have an account? <a class="text-base text-[#F25656] ml-3" routerLink="/auth/login">Log
+        In</a>
+      </p>
+
+      <div class="grid grid-cols-2 gap-x-4 mb-4">
+        <div>
+          <label
+            for="first-name"
+            class="text-base block mb-2">
+            First name <span class="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            id="first-name"
+            formControlName="first_name"
+            autocomplete="given-name"
+            placeholder="George"
+            class="border border-gray-200 block w-full p-3 mb-2 sm:text-sm rounded-lg"
+          />
+
+          <div class="pl-3">
+            <ng-container *ngIf="registrationForm.controls.first_name as firstName">
+              <div class="input-error" *ngIf="(firstName.dirty || firstName.touched) && firstName.hasError('required')">
+                This field is
+                required.
+              </div>
+            </ng-container>
+          </div>
+
+        </div>
+
+        <div>
+          <label
+            for="last-name"
+            class="text-base block mb-2">
+            Last name <span class="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            id="last-name"
+            formControlName="last_name"
+            autocomplete="family-name"
+            placeholder="Lucas"
+            class="border border-gray-200 block w-full p-3 mb-2 sm:text-sm rounded-lg"
+          />
+
+          <div class="pl-3">
+            <ng-container *ngIf="registrationForm.controls.last_name as lastName">
+              <div class="input-error" *ngIf="(lastName.dirty || lastName.touched) && lastName.hasError('required')">
+                This field is
+                required.
+              </div>
+            </ng-container>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label
+          for="email"
+          class="text-base block mb-2">
+          Email <span class="text-red-500">*</span>
+        </label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          formControlName="email"
+          placeholder="example@email.com"
+          autocomplete="email"
+          class="border border-gray-200 block w-full p-3 mb-2 sm:text-sm rounded-lg"
+        />
+
+        <div class="pl-3">
+          <p class="mb-1 text-m text-[#999CA0]">Please provide a valid email address.</p>
+          <ng-container *ngIf="registrationForm.controls.email as email">
+            <div class="input-error" *ngIf="(email.dirty || email.touched) && email.hasError('required')">This field is
+              required.
+            </div>
+            <div class="input-error" *ngIf="(email.dirty || email.touched) && email.hasError('email')">Please enter a
+              valid email.
+            </div>
+          </ng-container>
+        </div>
+
+      </div>
+
+      <div class="mb-4">
+        <label
+          for="password"
+          class="text-base block mb-2">
+          Your Password <span class="text-red-500">*</span>
+        </label>
+
+        <div class="relative rounded-lg">
+          <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+            <p (click)="showPassword = !showPassword"
+               class="underline text-sm"
+            >{{ showPassword ? 'Hide' : 'Show' }}</p>
+          </div>
+          <input
+            id="password"
+            autocomplete="password"
+            placeholder="Password"
+            formControlName="password"
+            [type]="showPassword ? 'text': 'password'"
+            class="border border-gray-200 block w-full p-3 mb-2 sm:text-sm rounded-lg"
+          />
+        </div>
+        <div class="pl-3">
+          <p class="mb-1 text-m text-[#999CA0]">Your password must contain at least 8 characters, 1 capital letter
+            and 1 number.</p>
+          <ng-container *ngIf="registrationForm.controls.password as password">
+            <div class="input-error" *ngIf="(password.dirty || password.touched) && password.hasError('required')">This
+              field is
+              required.
+            </div>
+            <div class="input-error" *ngIf="(password.dirty || password.touched) && password.hasError('minlength')">
+              Password should be at least <strong>{{password.getError('minlength').requiredLength}}</strong>
+              characters.
+            </div>
+            <div class="input-error" *ngIf="(password.dirty || password.touched) && password.hasError('maxLength')">
+              Password should be less than <strong>{{password.getError('maxLength').requiredLength}}</strong>
+              characters.
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label
+          for="password_confirmation"
+          class="text-base block mb-2">
+          Confirm password <span class="text-red-500">*</span>
+        </label>
+
+        <div class="relative rounded-lg">
+          <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+            <p (click)="showPasswordConfirmation = !showPasswordConfirmation"
+               class="underline text-sm"
+            >{{ showPasswordConfirmation ? 'Hide' : 'Show' }}</p>
+          </div>
+          <input
+            id="password_confirmation"
+            autocomplete="password"
+            placeholder="Password"
+            formControlName="password_confirmation"
+            [type]="showPasswordConfirmation ? 'text': 'password'"
+            class="border border-gray-200 block w-full p-3 mb-2 sm:text-sm rounded-lg"
+          />
+        </div>
+
+        <div class="pl-3">
+          <div class="input-error" *ngIf="registrationForm.dirty
+                && registrationForm.hasError('passwordShouldMatch')
+                && (registrationForm.controls.password_confirmation.dirty || registrationForm.controls.password_confirmation.dirty)">
+            Password doesn't match
+          </div>
+        </div>
+      </div>
+
+      <button
+        [class.disabled]="registrationForm.invalid"
+        class="bg-[#F25656] text-base py-3 text-white rounded-lg w-full"
+        type="submit">
+        Sign Up
+      </button>
+
+    </div>
+  </form>
+
+</div>
